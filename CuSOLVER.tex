@@ -1,0 +1,143 @@
+\documentclass[a4paper,14pt,russian]{extreport}
+ 
+\usepackage{extsizes}
+\usepackage{cmap} % для кодировки шрифтов в pdf
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+%\usepackage{pscyr} % набор красивых шрифтов
+ 
+\usepackage{graphicx} % для вставки картинок
+\usepackage{amssymb,amsfonts,amsmath,amsthm} % математические дополнения от АМС
+\usepackage{indentfirst} % отделять первую строку раздела абзацным отступом тоже
+\usepackage[usenames,dvipsnames]{color} % названия цветов
+\usepackage{makecell}
+\usepackage{multirow} % улучшенное форматирование таблиц
+\usepackage{ulem} % подчеркивания
+ 
+\linespread{1.3} % полуторный интервал
+\renewcommand{\rmdefault}{ftm} % Times New Roman
+\frenchspacing
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+\fancyheadoffset{0mm}
+\fancyfootoffset{0mm}
+\setlength{\headheight}{17pt}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{ 
+    \fancyhf{}
+    \rhead{\thepage}}
+\setcounter{page}{1} % начать нумерацию страниц с №1
+
+\usepackage[tableposition=top]{caption}
+\usepackage{subcaption}
+\DeclareCaptionLabelFormat{gostfigure}{Рисунок #2}
+\DeclareCaptionLabelFormat{gosttable}{Таблица #2}
+\DeclareCaptionLabelSeparator{gost}{~---~}
+\captionsetup{labelsep=gost}
+\captionsetup[figure]{labelformat=gostfigure}
+\captionsetup[table]{labelformat=gosttable}
+\renewcommand{\thesubfigure}{\asbuk{subfigure}}
+
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+    {\filcenter}
+    {\MakeUppercase{\chaptertitlename} \thechapter}
+    {8pt}
+    {\bfseries}{}
+\titleformat{\section}
+    {\normalsize\bfseries}
+    {\thesection}
+    {1em}{}
+\titleformat{\subsection}
+    {\normalsize\bfseries}
+    {\thesubsection}
+    {1em}{}
+     
+% Настройка вертикальных и горизонтальных отступов
+\titlespacing*{\chapter}{0pt}{-30pt}{8pt}
+\titlespacing*{\section}{\parindent}{*4}{*4}
+\titlespacing*{\subsection}{\parindent}{*4}{*4}
+
+\usepackage{geometry}
+\geometry{left=3cm}
+\geometry{right=1.5cm}
+\geometry{top=2.4cm}
+\geometry{bottom=2.4cm}
+
+\usepackage{enumitem}
+\makeatletter
+    \AddEnumerateCounter{\asbuk}{\@asbuk}{м)}
+\makeatother
+\setlist{nolistsep}
+\renewcommand{\labelitemi}{-}
+\renewcommand{\labelenumi}{\asbuk{enumi})}
+\renewcommand{\labelenumii}{\arabic{enumii})}
+
+\usepackage{tocloft}
+\renewcommand{\cfttoctitlefont}{\hspace{0.38\textwidth} \bfseries\MakeUppercase}
+\renewcommand{\cftbeforetoctitleskip}{-1em}
+\renewcommand{\cftaftertoctitle}{\mbox{}\hfill \\ \mbox{}\hfill{\footnotesize Стр.}\vspace{-2.5em}}
+\renewcommand{\cftchapfont}{\normalsize\bfseries \MakeUppercase{\chaptername} }
+\renewcommand{\cftsecfont}{\hspace{31pt}}
+\renewcommand{\cftsubsecfont}{\hspace{11pt}}
+\renewcommand{\cftbeforechapskip}{1em}
+\renewcommand{\cftparskip}{-1mm}
+\renewcommand{\cftdotsep}{1}
+\setcounter{tocdepth}{2} % задать глубину оглавления — до subsection включительно
+
+\newcommand{\empline}{\mbox{}\newline}
+\newcommand{\likechapterheading}[1]{ 
+    \begin{center}
+    \textbf{\MakeUppercase{#1}}
+    \end{center}
+    \empline}
+    
+\makeatletter
+    \renewcommand{\@dotsep}{2}
+    \newcommand{\l@likechapter}[2]{{\bfseries\@dottedtocline{0}{0pt}{0pt}{#1}{#2}}}
+\makeatother
+\newcommand{\likechapter}[1]{    
+    \likechapterheading{#1}    
+    \addcontentsline{toc}{likechapter}{\MakeUppercase{#1}}}
+
+\usepackage[square,numbers,sort&compress]{natbib}
+\renewcommand{\bibnumfmt}[1]{#1.\hfill} % нумерация источников в самом списке — через точку
+\renewcommand{\bibsection}{\likechapter{Список литературы}} % заголовок специального раздела
+\setlength{\bibsep}{0pt}
+
+\parindent = 1cm
+
+\begin{document}
+Библиотека cuSolver основана на более ранних библиотеках cuBlas и cuSparse. Она соединяет в одну три непересекающиеся библиотеки, каждая из которых может использоваться независимо от других или совместно с другими библиотеками в комплекте. 
+\par
+Цель создания cuSolver - предоставить возможности пакета LAPACK, такие как разложение матрицы на множители и др. (triangular solve routines) для переопределённых матриц, солверы метода наименьших квадратов и характеристического числа для разрежённых матриц(большинство нулей). 
+\par
+Первая часть cuSolver называется cuSolverDN (Dense LAPACK) и используется для факторизации плотных матриц  и обработки подпрограмм таких, как LU (факторизация матрицы $A$ вида $A = LU$, где $L$ - нижняя треугольная матрица, $U$ - верхняя треугольная), QR (факторизация матрицы $A$ вида $A = QR$, где $Q$ - ортогональная матрица, $R$ - верхняя треугольная), SVD (сингулярное разложение) и LDLT.
+\par
+Следующая часть cuSolverSP: Sparse LAPACK. Она была разработана длоярешения резрежённой системе линейных ураавнений $Ax=b$, а также решению задачи наименьших квадратов $x = $ argmin $||A*z-b||$, где разрежённая матрица $A \in R_(m\times n)$, $b \in R_m$ и $x\in R_n$. В основе лежит алгоритм QR-факторизации. Матрица $A$ принимается в формате CSR (compressed sparse row). 
+\par
+CSR формат представляет матрицу в виде трёх массивов: первый содержит ненулевые элементы, второй номера строк и третий - столбцов. 
+\par
+И последняя cuSolverRF: Refactorization
+\par
+LAPACK (Linear Algebra PACKage) - библиотека с открытым исходным кодом, содержащая методы для решения основных задач линейной алгебры. Написана на языке Fortran с использованием другой библиотеки BLAS и является развитием пакета LINPACK.
+BLAS (Basic Linear Algebra Subprograms) - интерфейс, базовые подпрограммы линейной алгебры:
+\begin{enumerate}
+\item Векторные операции вида $y\Leftarrow\alpha x + y$ - операции скалярного произведения, взятия нормы вектора и др.
+\item Операции матрица-вектор вида $y\Leftarrow\alpha Ax + \beta y$, решение $Tx = y$ для $x$ с треугольной матрицей $T$ и др.
+\item Операции матрица-матрица вида $C\Leftarrow \alpha AB + \beta C$, решение $B\Leftarrow \alpha T^(-1)B$ для треугольной матрицы $T$ и др.
+\end{enumerate}
+LINPACK — программная библиотека, написанная на языке Фортран, которая содержит набор подпрограмм для анализа и решения плотных систем линейных алгебраических уравнений. Активно исопльзует интерфейс BLACK.
+\par
+cublas<t>gemm() функция, которая выполняет произведение двух матриц. cublasGemmEx() может специализировать stream.
+\par
+
+
+\end{document}
+\grid
+\grid
